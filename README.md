@@ -73,6 +73,11 @@ python vcr_eval.py --result=[path of saved VCR result folder, named by exp_tag i
 python ve_eval.py --result=[path of saved VCR result folder, named by exp_tag in run]
 ```
 
+
+## Demo Notebook
+
+A Colab notebook for demo has been added as well.
+
 ## Cite
 If you are interested in our work, please cite the paper as
 ```
