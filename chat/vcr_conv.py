@@ -54,14 +54,14 @@ class VCRConversationTwoAgent():
         llava_QA_prompt = 'placeholder Reply in short.'
         minigpt4_QA_prompt = 'placeholder Answer it in one short sentence.'
 
-        if 'llava' in self.vqa_model.model_type:
-            self.vqa_prompt =  llava_QA_prompt
-        elif 'minigpt4' in self.vqa_model.model_type:
-            self.vqa_prompt = minigpt4_QA_prompt
-        elif 't5' in self.vqa_model.model_type or 'opt' in self.vqa_model.model_type:
-            self.vqa_prompt =  blip2_QA_prompt
-        else:
-            raise NotImplementedError(f'Could not find vqa prompt for {self.vqa_model.model_type}.')
+        # if 'llava' in self.vqa_model.model_type:
+        #     self.vqa_prompt =  llava_QA_prompt
+        # elif 'minigpt4' in self.vqa_model.model_type:
+        #     self.vqa_prompt = minigpt4_QA_prompt
+        # elif 't5' in self.vqa_model.model_type or 'opt' in self.vqa_model.model_type:
+        self.vqa_prompt =  blip2_QA_prompt
+        # else:
+        #     raise NotImplementedError(f'Could not find vqa prompt for {self.vqa_model.model_type}.')
         
 
     def prepare_init_asker_message(self, prompt, caption, question, answer_choices):
@@ -146,13 +146,13 @@ class VCRConversationTwoAgent():
         sub_answers = []
         for sub_question_i in cur_sub_questions:
             vqa_prompt = self.vqa_prompt.replace('placeholder', sub_question_i)
-            # Feed into VQA model.
-            if 'llava' in self.vqa_model.model_type or 'minigpt4' in self.vqa_model.model_type:
-                answer = self.vqa_model.ask(self.img, vqa_prompt)
-            elif 't5' in self.vqa_model.model_type or 'opt' in self.vqa_model.model_type:
-                answer = self.vqa_model.ask(self.img, vqa_prompt, length_penalty=-1, max_length=10)
-            else:
-                raise NotImplementedError(f'Not support VQA of {self.vqa_model.model_type}.')
+            # # Feed into VQA model.
+            # if 'llava' in self.vqa_model.model_type or 'minigpt4' in self.vqa_model.model_type:
+            #     answer = self.vqa_model.ask(self.img, vqa_prompt)
+            # elif 't5' in self.vqa_model.model_type or 'opt' in self.vqa_model.model_type:
+            answer = self.vqa_model.ask(self.img, vqa_prompt, max_length=10)
+            # else:
+            #     raise NotImplementedError(f'Not support VQA of {self.vqa_model.model_type}.')
 
             answer = self.answer_trim(answer)
             sub_answers.append(answer)
