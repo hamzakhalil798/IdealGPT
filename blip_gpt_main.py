@@ -48,6 +48,7 @@ def IdealGPT(vqa_model, dataset, data_ids, model, save_path='', max_n_rounds=5, 
 
         if type(dataset) == VCRSampler:
             image_path, qa = dataset.fetch_data(data_id)
+            
             info = {'setting':
                         {
                         'id': data_id,
@@ -65,6 +66,7 @@ def IdealGPT(vqa_model, dataset, data_ids, model, save_path='', max_n_rounds=5, 
                 caption = None
         elif type(dataset) == VESampler:
             image_path, ve_info = dataset.fetch_data(data_id)
+            print(image_path)
             info = {'setting':
                         {
                         'id': data_id,
@@ -197,28 +199,30 @@ def main(args):
     print('Finish loading data')
 
     print('Start loading VQA model')
-    if 'blip2' in args.vqa_model:
-        from lib.blip2_lib import Blip2Lavis
-        if 't5' in args.vqa_model and '_xl' in args.vqa_model:
-            vqa_model = Blip2Lavis(name="blip2_t5", model_type="pretrain_flant5xl", device=torch.device("cuda:{}".format(args.device_id)))
+    # if 'blip2' in args.vqa_model:
+    #     from lib.blip2_lib import Blip2Lavis
+    #     if 't5' in args.vqa_model and '_xl' in args.vqa_model:
+    #         vqa_model = Blip2Lavis(name="blip2_t5", model_type="pretrain_flant5xl", device=torch.device("cuda:{}".format(args.device_id)))
 
-        elif 't5' in args.vqa_model and '_xxl' in args.vqa_model:
-            vqa_model = Blip2Lavis(name="blip2_t5", model_type="pretrain_flant5xxl", device=torch.device("cuda:{}".format(args.device_id)))
+    #     elif 't5' in args.vqa_model and '_xxl' in args.vqa_model:
+    #         vqa_model = Blip2Lavis(name="blip2_t5", model_type="pretrain_flant5xxl", device=torch.device("cuda:{}".format(args.device_id)))
 
-        elif 'opt' in args.vqa_model and '6.7b' in args.vqa_model:
-            vqa_model = Blip2Lavis(name="blip2_opt", model_type="pretrain_opt6.7b", device=torch.device("cuda:{}".format(args.device_id)))
+    #     elif 'opt' in args.vqa_model and '6.7b' in args.vqa_model:
+    #         vqa_model = Blip2Lavis(name="blip2_opt", model_type="pretrain_opt6.7b", device=torch.device("cuda:{}".format(args.device_id)))
 
-        elif 'opt' in args.vqa_model and '2.7b' in args.vqa_model:
-            vqa_model = Blip2Lavis(name="blip2_opt", model_type="pretrain_opt2.7b", device=torch.device("cuda:{}".format(args.device_id)))
-        else:
-            raise NotImplemented(f'{args.vqa_model} not supported')
-    elif 'llava' in args.vqa_model:
-        from lib.llava_lib import LLAVA
-        vqa_model = LLAVA(temperature=args.temp_vqa)
-    elif 'minigpt4' in args.vqa_model:
-        from lib.minigpt4_lib import MINIGPT4
-        vqa_model = MINIGPT4(gpu_id=args.device_id, temperature=args.temp_vqa)
+    #     elif 'opt' in args.vqa_model and '2.7b' in args.vqa_model:
+    #         vqa_model = Blip2Lavis(name="blip2_opt", model_type="pretrain_opt2.7b", device=torch.device("cuda:{}".format(args.device_id)))
+    #     else:
+    #         raise NotImplemented(f'{args.vqa_model} not supported')
+    # elif 'llava' in args.vqa_model:
+    #     from lib.llava_lib import LLAVA
+    #     vqa_model = LLAVA(temperature=args.temp_vqa)
+    # elif 'minigpt4' in args.vqa_model:
+    #     from lib.minigpt4_lib import MINIGPT4
+    #     vqa_model = MINIGPT4(gpu_id=args.device_id, temperature=args.temp_vqa)
+    from lib.blip2_lib import Blip2HuggingFace
 
+    vqa_model=Blip2HuggingFace()
     print('Finish loading VQA model {}'.format(args.vqa_model))
 
     question_model = args.model
@@ -245,3 +249,4 @@ def main(args):
 if __name__ == '__main__':
     args = parse()
     main(args)
+
