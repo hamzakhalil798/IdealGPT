@@ -8,9 +8,9 @@ import json
 
 def parse():
     parser = argparse.ArgumentParser(description='IdealGPT in test datasets.')
-    parser.add_argument('--save_root', type=str, default='./exp_data/', 
+    parser.add_argument('--save_root', type=str, default='/content/vcr1/exp_data/', 
                         help='root path for saving results')
-    parser.add_argument('--data_num', type=int, default=500,
+    parser.add_argument('--data_num', type=int, default=1,
                         help='number of data sampled')
     parser.add_argument('--dataset', type=str, default='vcr_val',
                         help='Names of the dataset to use in the experiment. Valid datasets include vcr_val, ve_dev. Default is vcr_val')
@@ -18,7 +18,7 @@ def parse():
     return args
 
 def Sample_VCR(dataset, data_num):
-    dataset_path = '/home/haoxuan/data/vcr1/'
+    dataset_path = '/content/vcr1/'
     if 'val' in dataset:
         dataset_anno_dir = os.path.join(dataset_path, 'val.jsonl')
     else:
@@ -69,3 +69,4 @@ elif 've' in args.dataset:
 with open(result_path, 'w') as f:
     yaml.dump(sampled_id, f)
 print(f'Finish writing to {result_path}')
+
